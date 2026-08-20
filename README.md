@@ -1,4 +1,4 @@
-DOI Lizenz XXX
+
 
 # PaperOdourPredictables
 *PaperOdourPredictables* is a tool which contains data specific to substances typically found in paper. It can be used for targeting and improving your gas chromatography - mass spectrometry with olfactometry (GC-MS/O) analysis and to interpret and assess the likely sources of odour-active substances in the paper production process. The database was built from a broad literature review combined with data from the working group. 
@@ -34,3 +34,10 @@ thomas.simat@tu-dresden.de
 
 Please also visit the website of our working group on the Dresden University of Technology website: <br>
 https://tu-dresden.de/mn/chemie/lc/lc2
+
+## License
+The source code of this project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+The MIT License applies only to the original source code of this repository and does not apply to third-party content, including literature, data, databases, images, trademarks, or other materials that are subject to separate copyright or licensing terms.
+
+Third-party content remains subject to the respective copyright, license, and/or terms of use of its original source.
