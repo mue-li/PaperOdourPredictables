@@ -129,13 +129,13 @@ app.layout = dbc.Container(
                     [
                         html.Img(
                             src=dash.get_asset_url("TUD_Logo.png"),
-                            height="40px",
+                            height="80px",
                             style={
                                 "marginRight": "20px",
                                 "marginLeft": "10px",
                             },
                         ),
-                        "PaperPredictables - A tool to improve your GC-MS/O analysis for paper and cardboard",
+                        "PaperOdourPredictables - A tool to improve your GC-MS/O analysis for paper and cardboard",
                     ],
                     href="/",
                     className="mr-4",
@@ -151,19 +151,74 @@ app.layout = dbc.Container(
                 html.Div(
                     [
                         html.Br(),
-                        html.P("PaperPredictables is a tool for targeting and improving your GC-MS/O analysis of odour-active substances in paper and cardboard. It is based on a database containing typical odour and off-odour substances for paper and cardboard. The substances are listed with data on gas chromatography (GC), mass spectrometry (MS) and olfactometry (O):"),
+                        html.P([
+                            "PaperOdourPredictables is a tool which contains data specific to substances typically found in paper. ",
+                            "It can be used for targeting and improving your gas chromatography - mass spectrometry with olfactometry (GC-MS/O) analysis and to interpret and assess the likely sources of odour-active substances in the paper production process. "
+                            "The database was built from a broad literature review combined with data from the working group. ",
+                            html.Br(),
+                            html.Br(),
+                            "The odorants typically found in paper and board are listed with data on gas chromatography (GC), mass spectrometry (MS), olfactometry (O), and the likely source in the production process:",
+                        ]),
                         html.Ul(
                             [
-                                html.Li("Retention indices (RI) for the polar WAX column and the non-polar DB-5 column (from NIST Chemistry WebBook, https://doi.org/10.18434/T4D303)"),
-                                html.Li("Typical fragments including relative intensities (from NIST Chemistry WebBook, https://doi.org/10.18434/T4D303)"),
-                                html.Li("Odour-describing attributes (from our in-house odour database)"),
+                                html.Li([
+                                    html.Strong("Odour-describing attributes"),
+                                    html.Br(),
+                                    "from our in-house odour database and from the references listed in the data table"
+                                ]),
+                                html.Li([
+                                    html.Strong("Odour thresholds"),
+                                    " for many substances",
+                                    html.Br(),
+                                    "calculated as the median of the odour detection thresholds in air reported by van Gemert, L. J.: Odour Thresholds Compilations of odour threshold values in air, water and other media. Oliemans Punter & Partners BV, Utrecht, 2. edition, 2011."
+                                ]),
+                                html.Li([
+                                    html.Strong("Retention indices (RI)"),
+                                    "  for a polar column (e.g. WAX) and a non-polar column (e.g. DB-5)",
+                                    html.Br(),
+                                    "from NIST Mass Spectrometry Data Center, William E. Wallace, director. 'Retention Indices' in NIST Chemistry WebBook, NIST Standard Reference Database Number 69, Eds. P.J. Linstrom and W.G. Mallard, National Institute of Standards and Technology, Gaithersburg MD, 20899, ",
+                                    html.A("https://doi.org/10.18434/T4D303", href="https://doi.org/10.18434/T4D303", target="_blank"),
+                                    ", (retrieved August 2026)"                                
+                                ]),
+                                html.Li([
+                                    html.Strong("Mass spectra information"),
+                                    " (typical fragments and relative intensities)",
+                                    html.Br(),
+                                    " from NIST Mass Spectrometry Data Center, William E. Wallace, director. 'Mass Spectra' in NIST Chemistry WebBook, NIST Standard Reference Database Number 69, Eds. P.J. Linstrom and W.G. Mallard, National Institute of Standards and Technology, Gaithersburg MD, 20899, ",
+                                    html.A("https://doi.org/10.18434/T4D303", href="https://doi.org/10.18434/T4D303", target="_blank"),
+                                    ", (retrieved August 2026)" 
+                                ]),
+                                html.Li([
+                                    html.Strong("source / origin "),
+                                    "in the production process of paper and cardboard ",
+                                    html.Br(),
+                                    "(For each substance, the reference is given in which the substance was described as an odourant derived from paper, as well as, (where applicable) a reference indicating the substance's source or origin. ",
+                                    "The bibliography can be downloaded here: ",
+                                    html.Br(),
+                                    html.Button(
+                                        "Download bib.txt",
+                                        id="btn-download-bib",
+                                        n_clicks=0, 
+                                        className="btn btn-primary",
+                                        style={
+                                            "background-color": "#005d39",
+                                            'opacity': '1', 
+                                            'border-color': 'transparent',
+                                            "width": "250px",
+                                            "marginLeft": "1px"
+                                        },
+                                    ),
+                                    dcc.Download(id="download-bib"),
+                                ])
+
+
                             ],
                             style={
                                 'margin-left': '10px',
                                 'margin-bottom': '4px'
                             }
                         ),
-                        html.P("In addition, information on the possible origin and formation of many substances is included."),
+                        html.Br(),
                         html.Strong("How do I use this application?"),
                         html.Ol(
                             [
@@ -217,13 +272,13 @@ app.layout = dbc.Container(
                 html.Div(
                     [
                         html.Strong("1) Master table"),
-                        html.P("Table showing typical odour-active substances in paper and cardboard materials."),
+                        html.P("The table contains odour-active substances typically found in paper and board."),
                         html.Div(id="table-count"),
                         dcc.Store(id="selected-substances"),
                         dash_table.DataTable(
                             id="table-master",
-                            columns=[{"name": c, "id": c, "selectable": True} for c in ["Odorant", "CAS-No.", "Odour", "RI-WAX", "RI-DB5"]],
-                            data=df[["Odorant", "CAS-No.", "Odour", "RI-WAX", "RI-DB5"]].to_dict("records"),
+                            columns=[{"name": c, "id": c, "selectable": True} for c in ["Odorant", "CAS-No.", "Odour", "RI-WAX", "RI-DB5", "Origin"]],
+                            data=df[["Odorant", "CAS-No.", "Odour", "RI-WAX", "RI-DB5", "Origin"]].to_dict("records"),
                             filter_action="native",
                             row_selectable="multi",
                             selected_rows=[],
@@ -524,6 +579,18 @@ app.layout = dbc.Container(
 ###############################################################################################
 # CALLBACKS
 ###############################################################################################
+
+##### Download Bibliography
+@app.callback(
+    Output("download-bib", "data"),
+    Input("btn-download-bib", "n_clicks"),
+    prevent_initial_call=True
+)
+def download_bib(n_clicks):
+    if not n_clicks:
+        return dash.no_update
+
+    return dcc.send_file("bib.txt")
 
 ##### Master table 
 @app.callback(
