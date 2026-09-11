@@ -35,7 +35,7 @@ thomas.simat@tu-dresden.de
 Please also visit the website of our working group on the Dresden University of Technology website: <br>
 https://tu-dresden.de/mn/chemie/lc/lc2
 
-## License
+# License
 The source code of this project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 The MIT License applies only to the original source code of this repository and does not apply to third-party content, including literature, data, databases, images, trademarks, or other materials that are subject to separate copyright or licensing terms.
