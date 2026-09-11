@@ -30,7 +30,7 @@ def load_sim():
 
 ##### Search for RI and fragment masses
 def get_ri_list(substances, phase):
-    col = "RI-WAX" if phase == "RI-WAX" else "RI-DB5"
+    col = "RI polar" if phase == "RI polar" else "RI semi-standard non-polar"
     return [s[col] for s in substances if s[col]]
 
 def get_sim_for_cas(cas_list, highest_intensity_only=False):
@@ -96,7 +96,9 @@ def show_ms(cas, title):
         x=df_sub["Fragment"],
         y=df_sub["rel-Intensity"],
         marker_color='darkblue',
-        width=0.8
+        width=0.8,
+        text=df_sub["Fragment"],
+        textposition="outside"
     ))
     
     fig.update_layout(
@@ -164,17 +166,17 @@ app.layout = dbc.Container(
                                 html.Li([
                                     html.Strong("Odour-describing attributes"),
                                     html.Br(),
-                                    "from our in-house odour database and from the references listed in the data table"
+                                    "from our in-house odour database and from the reference literature"
                                 ]),
                                 html.Li([
                                     html.Strong("Odour thresholds"),
                                     " for many substances",
                                     html.Br(),
-                                    "calculated as the median of the odour detection thresholds in air reported by van Gemert, L. J.: Odour Thresholds Compilations of odour threshold values in air, water and other media. Oliemans Punter & Partners BV, Utrecht, 2. edition, 2011."
+                                    "calculated as the median of the odour detection thresholds in Air (if it is not provided, then another medium) reported by van Gemert, L. J. (2011). Odour Thresholds: Compilations of odour threshold values in air, water and other media (2nd enlarged and revised edition). Oliemans Punter & Partners BV."
                                 ]),
                                 html.Li([
                                     html.Strong("Retention indices (RI)"),
-                                    "  for a polar column (e.g. WAX) and a non-polar column (e.g. DB-5)",
+                                    "  for a polar column (e.g. WAX) and a semi-standard non-polar column (e.g. DB-5)",
                                     html.Br(),
                                     "from NIST Mass Spectrometry Data Center, William E. Wallace, director. 'Retention Indices' in NIST Chemistry WebBook, NIST Standard Reference Database Number 69, Eds. P.J. Linstrom and W.G. Mallard, National Institute of Standards and Technology, Gaithersburg MD, 20899, ",
                                     html.A("https://doi.org/10.18434/T4D303", href="https://doi.org/10.18434/T4D303", target="_blank"),
@@ -189,14 +191,16 @@ app.layout = dbc.Container(
                                     ", (retrieved August 2026)" 
                                 ]),
                                 html.Li([
-                                    html.Strong("source / origin "),
+                                    html.Strong("Origin / Source "),
                                     "in the production process of paper and cardboard ",
                                     html.Br(),
-                                    "(For each substance, the reference is given in which the substance was described as an odourant derived from paper, as well as, (where applicable) a reference indicating the substance's source or origin. ",
+                                    "This list is not exhaustive. In addition to the information listed, other sources are not excluded. ",
+                                    html.Br(),
+                                    "For each substance, the reference is given in which the substance was described as an odorant derived from paper, as well as, (where applicable) a reference indicating the substance's source or origin. ",
                                     "The bibliography can be downloaded here: ",
                                     html.Br(),
                                     html.Button(
-                                        "Download bib.txt",
+                                        "Download Bibliography.txt",
                                         id="btn-download-bib",
                                         n_clicks=0, 
                                         className="btn btn-primary",
@@ -222,7 +226,7 @@ app.layout = dbc.Container(
                         html.Strong("How do I use this application?"),
                         html.Ol(
                             [
-                                html.Li("Use the checkboxes to select substances you want to analyse as targets. Then press the button to add the selected substances to the output table."),
+                                html.Li("Use the checkboxes to select substances you want to analyse as targets. Then click the button to add the selected substances to the output table."),
                                 html.Ul(
                                     [
                                         html.Li("You can also filter the columns using the filter fields below the header. To enable upper and lower case, press the red Aa field on the right-hand side of the filter cells. Enter the text in the filter cell and press Enter."),
@@ -249,7 +253,7 @@ app.layout = dbc.Container(
                                 html.Ul(
                                     [
                                         html.Li("First, select the phase of your GC column."),
-                                        html.Li("Then press the display button."),
+                                        html.Li("Then click the display button."),
                                         html.Li("Now you see a chromatogram with peaks of the selected substances at the corresponding retention indices."),
                                         html.Li("You can also click on the peaks to display the mass spectrum with typical fragments."),
                                     ],
@@ -277,8 +281,8 @@ app.layout = dbc.Container(
                         dcc.Store(id="selected-substances"),
                         dash_table.DataTable(
                             id="table-master",
-                            columns=[{"name": c, "id": c, "selectable": True} for c in ["Odorant", "CAS-No.", "Odour", "RI-WAX", "RI-DB5", "Origin"]],
-                            data=df[["Odorant", "CAS-No.", "Odour", "RI-WAX", "RI-DB5", "Origin"]].to_dict("records"),
+                            columns=[{"name": c, "id": c, "selectable": True} for c in ["Odorant", "CAS-No.", "Odour description", "Threshold mg/m³ Air", "RI polar", "RI semi-standard non-polar", "Origin/Source", "Literature paper samples", "Literature origin"]],
+                            data=df[["Odorant", "CAS-No.", "Odour description", "Threshold mg/m³ Air","RI polar", "RI semi-standard non-polar", "Origin/Source", "Literature paper samples", "Literature origin"]].to_dict("records"),
                             filter_action="native",
                             row_selectable="multi",
                             selected_rows=[],
@@ -324,7 +328,7 @@ app.layout = dbc.Container(
                         html.P("Here you can see the selected substances:"),
                         dash_table.DataTable(
                             id="table-selected",
-                            columns=[{"name": c, "id": c} for c in ["Odorant", "CAS-No.", "Odour", "RI-WAX", "RI-DB5", "Fragments", "Origin"]],
+                            columns=[{"name": c, "id": c} for c in ["Odorant", "CAS-No.", "Odour description", "RI polar", "RI semi-standard non-polar", "Fragments"]],
                             data=[],
                             filter_action="native",
                             row_selectable="multi",
@@ -410,8 +414,8 @@ app.layout = dbc.Container(
                         dcc.Dropdown(
                             id="dropdown-phase",
                             options=[
-                                {"label": "WAX", "value": "RI-WAX"},
-                                {"label": "DB5", "value": "RI-DB5"}
+                                {"label": "polar", "value": "RI polar"},
+                                {"label": "semi-standard non-polar", "value": "RI semi-standard non-polar"}
                             ],
                             placeholder="Select the phase",
                             style={"width": "250px"}
@@ -590,7 +594,7 @@ def download_bib(n_clicks):
     if not n_clicks:
         return dash.no_update
 
-    return dcc.send_file("bib.txt")
+    return dcc.send_file("Bibliography.txt")
 
 ##### Master table 
 @app.callback(
@@ -637,7 +641,7 @@ def update_store(n_add, n_remove, master_data, master_selected, selected_rows_ta
                     sim_sorted = ", ".join(
                         map(str,
                             sorted(
-                                int(f.strip())
+                                int(float(f.strip()))
                                 for f in sim_string.split(",")
                             )
                         )
@@ -680,7 +684,7 @@ def update_sim_lists(store):
     # all fragments
     sim_dict = get_sim_for_cas(cas_list)
     all_frags = sorted({
-        int(f.strip())
+        int(float(f.strip()))
         for v in sim_dict.values()
         for f in v.split(",")
     })
@@ -689,7 +693,7 @@ def update_sim_lists(store):
     sim1_dict = get_sim_for_cas(cas_list, highest_intensity_only=True)
 
     top_frags = sorted({
-        int(f.strip())
+        int(float(f.strip()))
         for v in sim1_dict.values()
         for f in v.split(",")
     })
@@ -804,4 +808,4 @@ def impressum(n, is_open):
 ###############################################################################################
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False)
