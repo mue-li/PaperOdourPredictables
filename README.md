@@ -4,7 +4,7 @@
 *PaperOdourPredictables* is a tool which contains data specific to substances typically found in paper. It can be used for targeting and improving your gas chromatography - mass spectrometry with olfactometry (GC-MS/O) analysis and to interpret and assess the likely sources of odour-active substances in the paper production process. The database was built from a broad literature review combined with data from the working group. 
 
 **If you use the *Rt-to-RI* tool, please cite our work!** <br>
-L. Müller, L.M. Kumpf, J.M. Zimmermann, T.J. Simat (**2026**): *PaperOdourPredictables*: A Python tool and database specified on odour-active substances typically found in paper and board. XXX
+L. Müller, L.M. Kumpf, J.M. Zimmermann, T.J. Simat (**2026**): *PaperOdourPredictables*: A Python tool and database specified on odour-active substances typically found in paper and board. [![DOI](https://zenodo.org/badge/1179001030.svg)](https://doi.org/10.5281/zenodo.22707178)
 
 # Web-Application
 *PaperOdourPredictables* is available online via the following link: <br>
