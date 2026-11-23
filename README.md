@@ -9,7 +9,7 @@ L. Müller, L.M. Kumpf, J.M. Zimmermann, T.J. Simat (**2026**): *PaperOdourPredi
 
 # Web-Application
 *PaperOdourPredictables* is available online via the following link: <br>
-**Coming soon!** The server is currently being set up and configured. (to open in a new tab, press Ctrl + click) <br>
+https://cclh45.chm.tu-dresden.de/app2/ (to open in a new tab, press Ctrl + click) <br>
 Alternatively, you can install the tool on your computer and use it locally by following the installation instructions.
 
 # Installation
